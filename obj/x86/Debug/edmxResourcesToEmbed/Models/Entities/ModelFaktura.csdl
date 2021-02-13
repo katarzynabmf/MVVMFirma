@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FakturyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Adresy">
+    <Key>
+      <PropertyRef Name="IdAdresu" />
+    </Key>
+    <Property Name="IdAdresu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ulica" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="NrDomu" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="NrLokalu" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="KodPocztowy" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Poczta" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Kraj" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Kontrahenci" Relationship="Self.FK_Kontrahenci_Adresy" FromRole="Adresy" ToRole="Kontrahenci" />
+  </EntityType>
+  <EntityType Name="Faktury">
+    <Key>
+      <PropertyRef Name="IdFaktury" />
+    </Key>
+    <Property Name="IdFaktury" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Numer" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="DataWystawienia" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="IdKontrahenta" Type="Int32" />
+    <Property Name="TerminPlatnosci" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="IsSposobuPlatnosci" Type="Int32" />
+    <Property Name="CzyAktywny" Type="Boolean" />
+    <NavigationProperty Name="IdSposobyPlatnosci" Relationship="Self.FK_Faktury_IdSposobyPlatnosci" FromRole="Faktury" ToRole="IdSposobyPlatnosci" />
+    <NavigationProperty Name="Kontrahenci" Relationship="Self.FK_Faktury_Kontrahenci" FromRole="Faktury" ToRole="Kontrahenci" />
+    <NavigationProperty Name="PozycjeFaktury" Relationship="Self.FK_PozycjeFaktury_Faktury" FromRole="Faktury" ToRole="PozycjeFaktury" />
+  </EntityType>
+  <EntityType Name="IdSposobyPlatnosci">
+    <Key>
+      <PropertyRef Name="IdSposobuPlatnosci" />
+    </Key>
+    <Property Name="IdSposobuPlatnosci" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CzyAktywny" Type="Boolean" />
+    <NavigationProperty Name="Faktury" Relationship="Self.FK_Faktury_IdSposobyPlatnosci" FromRole="IdSposobyPlatnosci" ToRole="Faktury" />
+  </EntityType>
+  <EntityType Name="Kontrahenci">
+    <Key>
+      <PropertyRef Name="IdKontrahenta" />
+    </Key>
+    <Property Name="IdKontrahenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Kod" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Nip" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Nazwa" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="IdRodzaju" Type="Int32" />
+    <Property Name="IdStatusu" Type="Int32" />
+    <Property Name="IdAdresu" Type="Int32" />
+    <NavigationProperty Name="Adresy" Relationship="Self.FK_Kontrahenci_Adresy" FromRole="Kontrahenci" ToRole="Adresy" />
+    <NavigationProperty Name="Faktury" Relationship="Self.FK_Faktury_Kontrahenci" FromRole="Kontrahenci" ToRole="Faktury" />
+    <NavigationProperty Name="Rodzaje" Relationship="Self.FK_Kontrahenci_Rodzaje" FromRole="Kontrahenci" ToRole="Rodzaje" />
+    <NavigationProperty Name="Statusy" Relationship="Self.FK_Kontrahenci_Statusy" FromRole="Kontrahenci" ToRole="Statusy" />
+  </EntityType>
+  <EntityType Name="PozycjeFaktury">
+    <Key>
+      <PropertyRef Name="IdPozycjiFaktury" />
+    </Key>
+    <Property Name="IdPozycjiFaktury" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdFaktury" Type="Int32" />
+    <Property Name="IdTowaru" Type="Int32" />
+    <Property Name="Cena" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Ilosc" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Rabat" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Faktury" Relationship="Self.FK_PozycjeFaktury_Faktury" FromRole="PozycjeFaktury" ToRole="Faktury" />
+    <NavigationProperty Name="Towary" Relationship="Self.FK_PozycjeFaktury_Towary" FromRole="PozycjeFaktury" ToRole="Towary" />
+  </EntityType>
+  <EntityType Name="Rodzaje">
+    <Key>
+      <PropertyRef Name="IdRodzaju" />
+    </Key>
+    <Property Name="IdRodzaju" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CzyAktywny" Type="Boolean" />
+    <NavigationProperty Name="Kontrahenci" Relationship="Self.FK_Kontrahenci_Rodzaje" FromRole="Rodzaje" ToRole="Kontrahenci" />
+  </EntityType>
+  <EntityType Name="Statusy">
+    <Key>
+      <PropertyRef Name="IdStatusu" />
+    </Key>
+    <Property Name="IdStatusu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="CzyAktywny" Type="Boolean" />
+    <NavigationProperty Name="Kontrahenci" Relationship="Self.FK_Kontrahenci_Statusy" FromRole="Statusy" ToRole="Kontrahenci" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Towary">
+    <Key>
+      <PropertyRef Name="IdTowaru" />
+    </Key>
+    <Property Name="IdTowaru" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Kod" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StawkaVatZakupu" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="StawkaVatSprzedazy" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Cena" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Marza" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="PozycjeFaktury" Relationship="Self.FK_PozycjeFaktury_Towary" FromRole="Towary" ToRole="PozycjeFaktury" />
+  </EntityType>
+  <Association Name="FK_Kontrahenci_Adresy">
+    <End Role="Adresy" Type="Self.Adresy" Multiplicity="0..1" />
+    <End Role="Kontrahenci" Type="Self.Kontrahenci" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Adresy">
+        <PropertyRef Name="IdAdresu" />
+      </Principal>
+      <Dependent Role="Kontrahenci">
+        <PropertyRef Name="IdAdresu" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Faktury_IdSposobyPlatnosci">
+    <End Role="IdSposobyPlatnosci" Type="Self.IdSposobyPlatnosci" Multiplicity="0..1" />
+    <End Role="Faktury" Type="Self.Faktury" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IdSposobyPlatnosci">
+        <PropertyRef Name="IdSposobuPlatnosci" />
+      </Principal>
+      <Dependent Role="Faktury">
+        <PropertyRef Name="IsSposobuPlatnosci" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Faktury_Kontrahenci">
+    <End Role="Kontrahenci" Type="Self.Kontrahenci" Multiplicity="0..1" />
+    <End Role="Faktury" Type="Self.Faktury" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kontrahenci">
+        <PropertyRef Name="IdKontrahenta" />
+      </Principal>
+      <Dependent Role="Faktury">
+        <PropertyRef Name="IdKontrahenta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PozycjeFaktury_Faktury">
+    <End Role="Faktury" Type="Self.Faktury" Multiplicity="0..1" />
+    <End Role="PozycjeFaktury" Type="Self.PozycjeFaktury" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Faktury">
+        <PropertyRef Name="IdFaktury" />
+      </Principal>
+      <Dependent Role="PozycjeFaktury">
+        <PropertyRef Name="IdFaktury" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kontrahenci_Rodzaje">
+    <End Role="Rodzaje" Type="Self.Rodzaje" Multiplicity="0..1" />
+    <End Role="Kontrahenci" Type="Self.Kontrahenci" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rodzaje">
+        <PropertyRef Name="IdRodzaju" />
+      </Principal>
+      <Dependent Role="Kontrahenci">
+        <PropertyRef Name="IdRodzaju" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kontrahenci_Statusy">
+    <End Role="Statusy" Type="Self.Statusy" Multiplicity="0..1" />
+    <End Role="Kontrahenci" Type="Self.Kontrahenci" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statusy">
+        <PropertyRef Name="IdStatusu" />
+      </Principal>
+      <Dependent Role="Kontrahenci">
+        <PropertyRef Name="IdStatusu" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PozycjeFaktury_Towary">
+    <End Role="Towary" Type="Self.Towary" Multiplicity="0..1" />
+    <End Role="PozycjeFaktury" Type="Self.PozycjeFaktury" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Towary">
+        <PropertyRef Name="IdTowaru" />
+      </Principal>
+      <Dependent Role="PozycjeFaktury">
+        <PropertyRef Name="IdTowaru" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FakturyEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Adresy" EntityType="Self.Adresy" />
+    <EntitySet Name="Faktury" EntityType="Self.Faktury" />
+    <EntitySet Name="IdSposobyPlatnosci" EntityType="Self.IdSposobyPlatnosci" />
+    <EntitySet Name="Kontrahenci" EntityType="Self.Kontrahenci" />
+    <EntitySet Name="PozycjeFaktury" EntityType="Self.PozycjeFaktury" />
+    <EntitySet Name="Rodzaje" EntityType="Self.Rodzaje" />
+    <EntitySet Name="Statusy" EntityType="Self.Statusy" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Towary" EntityType="Self.Towary" />
+    <AssociationSet Name="FK_Kontrahenci_Adresy" Association="Self.FK_Kontrahenci_Adresy">
+      <End Role="Adresy" EntitySet="Adresy" />
+      <End Role="Kontrahenci" EntitySet="Kontrahenci" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Faktury_IdSposobyPlatnosci" Association="Self.FK_Faktury_IdSposobyPlatnosci">
+      <End Role="IdSposobyPlatnosci" EntitySet="IdSposobyPlatnosci" />
+      <End Role="Faktury" EntitySet="Faktury" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Faktury_Kontrahenci" Association="Self.FK_Faktury_Kontrahenci">
+      <End Role="Kontrahenci" EntitySet="Kontrahenci" />
+      <End Role="Faktury" EntitySet="Faktury" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PozycjeFaktury_Faktury" Association="Self.FK_PozycjeFaktury_Faktury">
+      <End Role="Faktury" EntitySet="Faktury" />
+      <End Role="PozycjeFaktury" EntitySet="PozycjeFaktury" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kontrahenci_Rodzaje" Association="Self.FK_Kontrahenci_Rodzaje">
+      <End Role="Rodzaje" EntitySet="Rodzaje" />
+      <End Role="Kontrahenci" EntitySet="Kontrahenci" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kontrahenci_Statusy" Association="Self.FK_Kontrahenci_Statusy">
+      <End Role="Statusy" EntitySet="Statusy" />
+      <End Role="Kontrahenci" EntitySet="Kontrahenci" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PozycjeFaktury_Towary" Association="Self.FK_PozycjeFaktury_Towary">
+      <End Role="Towary" EntitySet="Towary" />
+      <End Role="PozycjeFaktury" EntitySet="PozycjeFaktury" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
